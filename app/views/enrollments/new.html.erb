@@ -1,0 +1,39 @@
+<!-- app/views/enrollments/new.html.erb -->
+<h1>New Enrollment</h1>
+
+<%= form_with model: @enrollment, local: true do |form| %>
+  <% if @enrollment.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @enrollment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :student_id, class: "form-label" %>
+    <%= form.select :student_id, options_from_collection_for_select(@students, :id, :student_number), { prompt: "Select Student" }, { class: "form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :course_id, class: "form-label" %>
+    <%= form.select :course_id, options_from_collection_for_select(@courses, :id, :title), { prompt: "Select Course" }, { class: "form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :status, class: "form-label" %>
+    <%= form.select :status, [['Enrolled', 'enrolled'], ['Completed', 'completed'], ['Dropped', 'dropped']], { prompt: "Select Status" }, { class: "form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :grade, class: "form-label" %>
+    <%= form.number_field :grade, step: 0.01, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", enrollments_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

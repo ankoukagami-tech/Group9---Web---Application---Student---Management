@@ -1,0 +1,38 @@
+<!-- app/views/courses/index.html.erb -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Courses</h1>
+  <%= link_to "New Course", new_course_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Code</th>
+        <th>Instructor</th>
+        <th>Credits</th>
+        <th>Actions</th>
+      </tr>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <tr>
+        <td><%= course.id %></td>
+        <td><%= course.title %></td>
+        <td><%= course.code %></td>
+        <td><%= course.teacher&.first_name %> <%= course.teacher&.last_name %></td>
+        <td><%= course.credits %></td>
+        <td>
+          <%= link_to "Show", course_path(course), class: "btn btn-sm btn-info" %>
+          <%= link_to "Edit", edit_course_path(course), class: "btn btn-sm btn-warning" %>
+          <%= button_to "Delete", course_path(course), method: :delete, 
+               form: { data: { turbo_confirm: "Are you sure?" } }, 
+               class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

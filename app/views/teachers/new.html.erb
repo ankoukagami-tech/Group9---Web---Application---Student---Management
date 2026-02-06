@@ -1,0 +1,62 @@
+<!-- app/views/teachers/new.html.erb -->
+<h1>New Teacher</h1>
+
+<%= form_with model: @teacher, local: true do |form| %>
+  <% if @teacher.errors.any? || @user.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @teacher.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :employee_number, class: "form-label" %>
+    <%= form.text_field :employee_number, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :first_name, class: "form-label" %>
+    <%= form.text_field :first_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :last_name, class: "form-label" %>
+    <%= form.text_field :last_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :department, class: "form-label" %>
+    <%= form.text_field :department, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :hire_date, class: "form-label" %>
+    <%= form.date_field :hire_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password, class: "form-label" %>
+    <%= form.password_field :password, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password_confirmation, class: "form-label" %>
+    <%= form.password_field :password_confirmation, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", teachers_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<!-- app/views/enrollments/my_courses.html.erb -->
+<h1>My Courses</h1>
+
+<div class="row">
+  <% @enrollments.each do |enrollment| %>
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><%= enrollment.course.title %></h5>
+          <p class="card-text"><%= enrollment.course.description %></p>
+          <p><small class="text-muted">Status: <%= enrollment.status.capitalize %></small></p>
+          <p><small class="text-muted">Grade: <%= enrollment.grade || 'N/A' %></small></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
