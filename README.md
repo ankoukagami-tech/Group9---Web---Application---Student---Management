@@ -95,15 +95,15 @@ After seeding the database, the following default accounts are created:
 
 **Admin Account**
 - Email: admin@example.com
-- Password: password123
+- Password: admin@123
 
 **Teacher Account**
 - Email: teacher@example.com
-- Password: password123
+- Password: teacher@123
 
 **Student Account**
 - Email: student@example.com
-- Password: password123
+- Password: student@123
 
 **Usage**
 1. Navigate to http://localhost:3000
