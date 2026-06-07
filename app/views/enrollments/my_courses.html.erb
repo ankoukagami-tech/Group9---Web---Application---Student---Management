@@ -1,17 +1,2 @@
-<!-- app/views/enrollments/my_courses.html.erb -->
-<h1>My Courses</h1>
-
-<div class="row">
-  <% @enrollments.each do |enrollment| %>
-    <div class="col-md-4 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><%= enrollment.course.title %></h5>
-          <p class="card-text"><%= enrollment.course.description %></p>
-          <p><small class="text-muted">Status: <%= enrollment.status.capitalize %></small></p>
-          <p><small class="text-muted">Grade: <%= enrollment.grade || 'N/A' %></small></p>
-        </div>
-      </div>
-    </div>
-  <% end %>
-</div>
+"<!-- app/views/enrollments/my_courses.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">My Courses</h1>\n    <p class=\"text-secondary mb-0\">Overview of courses you are enrolled in and your academic performance.</p>\n  </div>\n</div>\n\n<div class=\"row g-4\">\n  <% if @enrollments.any? %>\n    <% @enrollments.each do |enrollment| %>\n      <div class=\"col-md-6 col-lg-4\">\n        <div class=\"glass-card p-4 h-100 d-flex flex-column justify-content-between\">\n          <div>\n            <div class=\"d-flex justify-content-between align-items-start mb-3\">\n              <span class=\"custom-badge custom-badge-primary\"><%= enrollment.course.code %></span>\n              <span class=\"custom-badge <%= enrollment.status == 'active' ? 'custom-badge-success' : 'custom-badge-warning' %>\">\n                <%= enrollment.status.capitalize %>\n              </span>\n            </div>\n            <h5 class=\"font-weight-bold text-primary mb-2\"><%= enrollment.course.title %></h5>\n            <p class=\"text-secondary small mb-4\" style=\"display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; height: 60px;\">\n              <%= enrollment.course.description.presence || \"No description provided.\" %>\n            </p>\n          </div>\n          \n          <div class=\"pt-3 border-top border-color\">\n            <div class=\"d-flex justify-content-between align-items-center mb-3\">\n              <span class=\"small text-secondary\">Credits: <strong class=\"text-primary\"><%= enrollment.course.credits %></strong></span>\n              <span class=\"small text-secondary\">Grade: \n                <strong class=\"text-gradient-secondary fs-5 ms-1\"><%= enrollment.grade.presence || 'N/A' %></strong>\n              </span>\n            </div>\n\n            <div class=\"d-flex align-items-center gap-2 pt-2 border-top border-color border-opacity-25\">\n              <div class=\"user-avat
+<truncated 1093 bytes>

@@ -1,10 +1,2 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+"/* app/assets/stylesheets/application.css */\n\n/* --- Import Google Fonts --- */\n@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');\n\n/* --- Design System & CSS Variables --- */\n:root {\n  --bg-primary: #0b0f19;\n  --bg-secondary: #111827;\n  --bg-card: rgba(30, 41, 59, 0.7);\n  --bg-card-hover: rgba(30, 41, 59, 0.9);\n  --border-color: rgba(51, 65, 85, 0.6);\n  --border-focus: rgba(99, 102, 241, 0.6);\n  \n  --text-primary: #f8fafc;\n  --text-secondary: #94a3b8;\n  --text-muted: #64748b;\n  \n  --accent-primary: #6366f1; /* Indigo */\n  --accent-primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);\n  --accent-secondary-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);\n  --accent-success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);\n  --accent-warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);\n  --accent-danger-gradient: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);\n  \n  --sidebar-width: 280px;\n  --sidebar-bg: #090d16;\n  --sidebar-border: rgba(30, 41, 59, 0.8);\n  --sidebar-item-hover: rgba(99, 102, 241, 0.1);\n  --sidebar-item-active: rgba(99, 102, 241, 0.15);\n  \n  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);\n  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);\n  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);\n  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.15);\n  --shadow-glow: 0 0 20px 0 rgba(99, 102, 241, 0.25);\n  --border-radius-sm: 8px;\n  --border-radius-md: 12px;\n  --border-radius-lg: 16px;\n  --border-radius-xl: 24px;\n}\n\n/* --- Base Styles --- */\nbody {\n  margin: 0;\n  font-family: var(--font-family);\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  min-height: 100vh;\n  overflow-x: hidden;\n  -webkit-font-smoothing: antialiased;
+<truncated 12950 bytes>
