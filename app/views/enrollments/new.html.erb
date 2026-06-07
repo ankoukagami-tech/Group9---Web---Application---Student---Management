@@ -1,2 +1,58 @@
-"<!-- app/views/enrollments/new.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">New Enrollment</h1>\n    <p class=\"text-secondary mb-0\">Enroll a student into an academic course catalog entry.</p>\n  </div>\n  <%= link_to enrollments_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <%= form_with model: @enrollment, local: true do |form| %>\n    <% if @enrollment.errors.any? %>\n      <div class=\"custom-alert custom-alert-danger mb-4\">\n        <div>\n          <h6 class=\"font-weight-bold mb-2 text-danger\"><i class=\"bi bi-x-circle-fill me-2\"></i>Please resolve the following errors:</h6>\n          <ul class=\"mb-0 small text-secondary\">\n            <% @enrollment.errors.full_messages.each do |message| %>\n              <li><%= message %></li>\n            <% end %>\n          </ul>\n        </div>\n      </div>\n    <% end %>\n\n    <h5 class=\"text-gradient-primary mb-3 pb-2 border-bottom border-color\"><i class=\"bi bi-journal-check me-2\"></i>Enrollment Specifications</h5>\n    <div class=\"row g-3 mb-4\">\n      <div class=\"col-md-12\">\n        <%= form.label :student_id, \"Student Profile\", class: \"form-label\" %>\n        <%= form.select :student_id, options_for_select(@students.map { |s| [\"#{s.first_name} #{s.last_name} (#{s.student_number})\", s.id] }, @enrollment.student_id), { prompt: \"Select Student\" }, { class: \"form-select\", required: true } %>\n      </div>\n\n      <div class=\"col-md-12\">\n        <%= form.label :course_id, \"Target Course\", class: \"form-label\" %>\n        <%= form.select :course_id, options_for_select(@courses.map { |c| [\"#{c.title} (#{c.code})\", c.id] }, @enrollment.course_id), { prompt: \"Select Course\" }, { class: \"form-select\", required: true } %>\n      </div>\n\n      <div class=\"col-md-6\">\n        <%= form.label :status, \"Registration
-<truncated 877 bytes>
+<!-- app/views/enrollments/new.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">New Enrollment</h1>
+    <p class="text-secondary mb-0">Enroll a student in an academic course.</p>
+  </div>
+  <%= link_to enrollments_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Enrollments
+  <% end %>
+</div>
+
+<div class="glass-card max-w-800 mx-auto">
+  <%= form_with model: @enrollment, local: true do |form| %>
+    <% if @enrollment.errors.any? %>
+      <div class="custom-alert custom-alert-danger mb-4">
+        <i class="bi bi-x-circle-fill" style="font-size: 1.25rem;"></i>
+        <div>
+          <div class="font-weight-bold mb-1">Please fix the following errors:</div>
+          <ul class="mb-0 small" style="padding-left: 1.25rem;">
+            <% @enrollment.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <%= form.label :student_id, "Select Student", class: "form-label" %>
+        <%= form.select :student_id, options_from_collection_for_select(@students, :id, :student_number), { prompt: "Select Student ID" }, { class: "form-select" } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= form.label :course_id, "Select Course", class: "form-label" %>
+        <%= form.select :course_id, options_from_collection_for_select(@courses, :id, :title), { prompt: "Select Course Title" }, { class: "form-select" } %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <%= form.label :status, "Enrollment Status", class: "form-label" %>
+        <%= form.select :status, [['Enrolled', 'enrolled'], ['Completed', 'completed'], ['Dropped', 'dropped']], { prompt: "Select Status" }, { class: "form-select" } %>
+      </div>
+
+      <div class="col-md-6">
+        <%= form.label :grade, "Grade / Mark", class: "form-label" %>
+        <%= form.number_field :grade, step: 0.01, min: 0, max: 100, class: "form-control", placeholder: "e.g., 92.5" %>
+        <div class="text-muted small mt-1" style="font-size: 0.75rem;">Scale of 0.00 to 100.00 (optional)</div>
+      </div>
+    </div>
+
+    <div class="detail-card-actions pt-4 border-top border-color">
+      <%= form.submit "Enroll Student", class: "btn btn-primary" %>
+      <%= link_to "Cancel", enrollments_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

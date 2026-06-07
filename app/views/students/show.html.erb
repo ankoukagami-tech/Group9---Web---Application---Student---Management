@@ -1,2 +1,73 @@
-"<!-- app/views/students/show.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">Student Details</h1>\n    <p class=\"text-secondary mb-0\">Detailed view of student profile and registration information.</p>\n  </div>\n  <%= link_to students_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <div class=\"d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-color\">\n    <div class=\"user-avatar\" style=\"width: 72px; height: 72px; font-size: 1.85rem; border-radius: 20px;\">\n      <%= \"#{@student.first_name[0]}#{@student.last_name[0]}\" rescue \"?\" %>\n    </div>\n    <div>\n      <h3 class=\"font-weight-bold mb-1\"><%= @student.first_name %> <%= @student.last_name %></h3>\n      <div class=\"d-flex gap-2 align-items-center\">\n        <span class=\"custom-badge custom-badge-primary\"><%= @student.student_number %></span>\n        <span class=\"custom-badge <%= @student.status == 'active' ? 'custom-badge-success' : 'custom-badge-danger' %>\">\n          <%= @student.status.capitalize %>\n        </span>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row g-4 mb-4\">\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Email Address</span>\n      <span class=\"font-weight-semibold text-primary fs-5\"><%= @student.user.email %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Date of Birth</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @student.date_of_birth.strftime(\"%B %d, %Y\") rescue \"N/A\" %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Gender</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @student.gender.presence || \"Not specified\" %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-se
-<truncated 1446 bytes>
+<!-- app/views/students/show.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">Student Profile</h1>
+    <p class="text-secondary mb-0">Detailed view of registered student personal and academic records.</p>
+  </div>
+  <%= link_to students_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Directory
+  <% end %>
+</div>
+
+<div class="glass-card">
+  <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-color">
+    <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2); width: 60px; height: 60px; font-size: 1.75rem;">
+      <i class="bi bi-person-fill"></i>
+    </div>
+    <div>
+      <h3 class="text-white mb-1"><%= @student.first_name %> <%= @student.last_name %></h3>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge badge-student font-monospace"><%= @student.student_number %></span>
+        <span class="badge <%= @student.status == 'active' ? 'badge-student' : 'badge-danger' %>"><%= @student.status.capitalize %></span>
+      </div>
+    </div>
+  </div>
+
+  <h5 class="text-gradient-primary mb-3"><i class="bi bi-card-text me-2"></i>Personal Info</h5>
+  <div class="detail-grid mb-4">
+    <div class="detail-item">
+      <div class="detail-label">Email Address</div>
+      <div class="detail-value text-white"><%= @student.user.email %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Date of Birth</div>
+      <div class="detail-value"><%= @student.date_of_birth&.strftime("%B %d, %Y") || "N/A" %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Gender</div>
+      <div class="detail-value"><%= @student.gender.present? ? @student.gender.capitalize : "N/A" %></div>
+    </div>
+  </div>
+
+  <h5 class="text-gradient-primary mb-3"><i class="bi bi-telephone-fill me-2"></i>Contact Details</h5>
+  <div class="detail-grid mb-4">
+    <div class="detail-item">
+      <div class="detail-label">Phone Number</div>
+      <div class="detail-value"><%= @student.phone.present? ? @student.phone : "N/A" %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Emergency Contact</div>
+      <div class="detail-value"><%= @student.emergency_contact.present? ? @student.emergency_contact : "N/A" %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Residential Address</div>
+      <div class="detail-value"><%= @student.address.present? ? @student.address : "N/A" %></div>
+    </div>
+  </div>
+
+  <div class="detail-card-actions pt-4 border-top border-color">
+    <% if @current_user.role.name == 'admin' || (@current_user.role.name == 'teacher' && @student.enrollments.joins(:course).exists?(courses: { teacher: @current_user.teacher })) %>
+      <%= link_to edit_student_path(@student), class: "btn btn-primary" do %>
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      <% end %>
+    <% end %>
+    
+    <% if @current_user.role.name == 'admin' %>
+      <%= button_to student_path(@student), method: :delete, 
+           form: { data: { turbo_confirm: "Are you sure you want to delete this student?" } }, 
+           class: "btn btn-danger" do %>
+        <i class="bi bi-trash"></i> Delete Student
+      <% end %>
+    <% end %>
+  </div>
+</div>

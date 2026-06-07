@@ -1,2 +1,81 @@
-"<!-- app/views/teachers/new.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">New Teacher</h1>\n    <p class=\"text-secondary mb-0\">Register a new teacher profile and account credentials.</p>\n  </div>\n  <%= link_to teachers_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <%= form_with model: @teacher, local: true do |form| %>\n    <% if @teacher.errors.any? || @user.errors.any? %>\n      <div class=\"custom-alert custom-alert-danger mb-4\">\n        <div>\n          <h6 class=\"font-weight-bold mb-2 text-danger\"><i class=\"bi bi-x-circle-fill me-2\"></i>Please resolve the following errors:</h6>\n          <ul class=\"mb-0 small text-secondary\">\n            <% @teacher.errors.full_messages.each do |message| %>\n              <li><%= message %></li>\n            <% end %>\n            <% @user.errors.full_messages.each do |message| %>\n              <li><%= message %></li>\n            <% end %>\n          </ul>\n        </div>\n      </div>\n    <% end %>\n\n    <!-- Section: Personal Info -->\n    <h5 class=\"text-gradient-primary mb-3 pb-2 border-bottom border-color\"><i class=\"bi bi-person-fill me-2\"></i>Professional Information</h5>\n    <div class=\"row g-3 mb-4\">\n      <div class=\"col-md-6\">\n        <%= form.label :employee_number, \"Employee Number\", class: \"form-label\" %>\n        <%= form.text_field :employee_number, class: \"form-control\", placeholder: \"e.g. TEACH001\", required: true %>\n      </div>\n      <div class=\"col-md-6\">\n        <%= form.label :department, \"Department\", class: \"form-label\" %>\n        <%= form.text_field :department, class: \"form-control\", placeholder: \"e.g. Computer Science\", required: true %>\n      </div>\n      <div class=\"col-md-6\">\n        <%= form.label :first_name, \"First Name\", class: \"form-label\" %>\n        <%= form.text_f
-<truncated 1724 bytes>
+<!-- app/views/teachers/new.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">New Teacher</h1>
+    <p class="text-secondary mb-0">Register a new instructor account and profile in the directory.</p>
+  </div>
+  <%= link_to teachers_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Directory
+  <% end %>
+</div>
+
+<div class="glass-card max-w-800 mx-auto">
+  <%= form_with model: @teacher, local: true do |form| %>
+    <% if @teacher.errors.any? || @user.errors.any? %>
+      <div class="custom-alert custom-alert-danger mb-4">
+        <i class="bi bi-x-circle-fill" style="font-size: 1.25rem;"></i>
+        <div>
+          <div class="font-weight-bold mb-1">Please fix the following errors:</div>
+          <ul class="mb-0 small" style="padding-left: 1.25rem;">
+            <% @teacher.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <h5 class="text-gradient-primary mb-3 pb-2 border-bottom border-color"><i class="bi bi-person-fill me-2"></i>Career Details</h5>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <%= form.label :employee_number, "Employee Number", class: "form-label" %>
+        <%= form.text_field :employee_number, class: "form-control", placeholder: "e.g., TEACH002", required: true %>
+      </div>
+      <div class="col-md-4">
+        <%= form.label :department, "Department", class: "form-label" %>
+        <%= form.text_field :department, class: "form-control", placeholder: "e.g., Computer Science", required: true %>
+      </div>
+      <div class="col-md-4">
+        <%= form.label :hire_date, "Hire Date", class: "form-label" %>
+        <%= form.date_field :hire_date, class: "form-control" %>
+      </div>
+    </div>
+
+    <h5 class="text-gradient-primary mb-3 pb-2 border-bottom border-color"><i class="bi bi-card-text me-2"></i>Personal Profile</h5>
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <%= form.label :first_name, "First Name", class: "form-label" %>
+        <%= form.text_field :first_name, class: "form-control", placeholder: "e.g., John", required: true %>
+      </div>
+      
+      <div class="col-md-6">
+        <%= form.label :last_name, "Last Name", class: "form-label" %>
+        <%= form.text_field :last_name, class: "form-control", placeholder: "e.g., Doe", required: true %>
+      </div>
+    </div>
+
+    <h5 class="text-gradient-primary mb-3 pb-2 border-bottom border-color"><i class="bi bi-key-fill me-2"></i>Security & Credentials</h5>
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <%= form.label :email, "Email Address", class: "form-label" %>
+        <%= form.email_field :email, class: "form-control", placeholder: "teacher@example.com", required: true %>
+      </div>
+      <div class="col-md-6">
+        <%= form.label :password, "Password", class: "form-label" %>
+        <%= form.password_field :password, class: "form-control", placeholder: "••••••••", required: true %>
+      </div>
+      <div class="col-md-6">
+        <%= form.label :password_confirmation, "Confirm Password", class: "form-label" %>
+        <%= form.password_field :password_confirmation, class: "form-control", placeholder: "••••••••", required: true %>
+      </div>
+    </div>
+
+    <div class="detail-card-actions pt-4 border-top border-color">
+      <%= form.submit "Create Teacher", class: "btn btn-primary" %>
+      <%= link_to "Cancel", teachers_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

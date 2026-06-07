@@ -1,2 +1,36 @@
-"<!-- app/views/sessions/new.html.erb -->\n<div class=\"glass-card auth-form-card\">\n  <div class=\"text-center mb-4\">\n    <div class=\"stat-card-icon mx-auto mb-3\" style=\"width: 54px; height: 54px; font-size: 1.75rem; background: var(--accent-primary-gradient); color: white; border: none; border-radius: 16px;\">\n      <i class=\"bi bi-mortarboard-fill\"></i>\n    </div>\n    <h2 class=\"h3 mb-1 font-weight-bold\" style=\"letter-spacing: -0.03em;\">Welcome Back</h2>\n    <p class=\"text-secondary small\">Please enter your credentials to access the portal.</p>\n  </div>\n  \n  <%= form_with url: login_path, local: true, method: :post do |form| %>\n    <div class=\"mb-3\">\n      <%= form.label :email, class: \"form-label\" %>\n      <div class=\"input-group\">\n        <span class=\"input-group-text border-end-0\" style=\"background: rgba(17, 24, 39, 0.8); border: 1px solid var(--border-color); color: var(--text-secondary); border-top-left-radius: var(--border-radius-md); border-bottom-left-radius: var(--border-radius-md);\">\n          <i class=\"bi bi-envelope\"></i>\n        </span>\n        <%= form.email_field :email, class: \"form-control border-start-0\", placeholder: \"name@example.com\", required: true, style: \"border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;\" %>\n      </div>\n    </div>\n    \n    <div class=\"mb-4\">\n      <%= form.label :password, class: \"form-label\" %>\n      <div class=\"input-group\">\n        <span class=\"input-group-text border-end-0\" style=\"background: rgba(17, 24, 39, 0.8); border: 1px solid var(--border-color); color: var(--text-secondary); border-top-left-radius: var(--border-radius-md); border-bottom-left-radius: var(--border-radius-md);\">\n          <i class=\"bi bi-lock\"></i>\n        </span>\n        <%= form.password_field :password, class: \"form-control border-start-0\", placeholder: \"••••••••\", required: true, style: \"border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;\" %>\n  
-<truncated 174 bytes>
+<!-- app/views/sessions/new.html.erb -->
+<div class="glass-card auth-form-card mx-auto">
+  <div class="text-center mb-4">
+    <div class="stat-card-icon mx-auto mb-3" style="width: 56px; height: 56px; font-size: 1.75rem; background: var(--accent-primary-gradient); color: white; border: none; border-radius: 14px;">
+      <i class="bi bi-mortarboard-fill"></i>
+    </div>
+    <h2 class="h3 mb-1 font-weight-bold text-gradient-primary">Welcome Back</h2>
+    <p class="text-secondary small">Please sign in to access your portal</p>
+  </div>
+  
+  <%= form_with url: login_path, local: true, method: :post do |form| %>
+    <div class="mb-3">
+      <%= form.label :email, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text border-end-0">
+          <i class="bi bi-envelope"></i>
+        </span>
+        <%= form.email_field :email, class: "form-control border-start-0", placeholder: "name@example.com", required: true %>
+      </div>
+    </div>
+    
+    <div class="mb-4">
+      <%= form.label :password, class: "form-label" %>
+      <div class="input-group">
+        <span class="input-group-text border-end-0">
+          <i class="bi bi-lock"></i>
+        </span>
+        <%= form.password_field :password, class: "form-control border-start-0", placeholder: "••••••••", required: true %>
+      </div>
+    </div>
+    
+    <div class="mt-2">
+      <%= form.submit "Sign In", class: "btn btn-primary w-100 py-2" %>
+    </div>
+  <% end %>
+</div>

@@ -1,2 +1,54 @@
-"<!-- app/views/teachers/show.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">Teacher Details</h1>\n    <p class=\"text-secondary mb-0\">Detailed view of teacher profile and registration information.</p>\n  </div>\n  <%= link_to teachers_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <div class=\"d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-color\">\n    <div class=\"user-avatar\" style=\"width: 72px; height: 72px; font-size: 1.85rem; border-radius: 20px;\">\n      <%= \"#{@teacher.first_name[0]}#{@teacher.last_name[0]}\" rescue \"?\" %>\n    </div>\n    <div>\n      <h3 class=\"font-weight-bold mb-1\"><%= @teacher.first_name %> <%= @teacher.last_name %></h3>\n      <div class=\"d-flex gap-2 align-items-center\">\n        <span class=\"custom-badge custom-badge-primary\"><%= @teacher.employee_number %></span>\n        <span class=\"custom-badge custom-badge-success\"><%= @teacher.department %></span>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row g-4 mb-4\">\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Email Address</span>\n      <span class=\"font-weight-semibold text-primary fs-5\"><%= @teacher.user.email %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Department</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @teacher.department %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Hire Date</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @teacher.hire_date.strftime(\"%B %d, %Y\") rescue \"N/A\" %></span>\n    </div>\n  </div>\n\n  <div class=\"d-flex gap-3 pt-3 border-top border-color\">\n    <%= link_to edit_teacher_path(@teacher), class: \"btn btn-warning px-4\" do %>\n      <i class=\"bi bi-pencil-squar
-<truncated 356 bytes>
+<!-- app/views/teachers/show.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">Teacher Profile</h1>
+    <p class="text-secondary mb-0">Detailed view of registered instructor personal and career records.</p>
+  </div>
+  <%= link_to teachers_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Directory
+  <% end %>
+</div>
+
+<div class="glass-card">
+  <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-color">
+    <div class="stat-card-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7; border-color: rgba(168, 85, 247, 0.2); width: 60px; height: 60px; font-size: 1.75rem;">
+      <i class="bi bi-person-workspace"></i>
+    </div>
+    <div>
+      <h3 class="text-white mb-1"><%= @teacher.first_name %> <%= @teacher.last_name %></h3>
+      <span class="badge badge-teacher font-monospace"><%= @teacher.employee_number %></span>
+    </div>
+  </div>
+
+  <h5 class="text-gradient-primary mb-3"><i class="bi bi-briefcase-fill me-2"></i>Employment Details</h5>
+  <div class="detail-grid mb-4">
+    <div class="detail-item">
+      <div class="detail-label">Email Address</div>
+      <div class="detail-value text-white"><%= @teacher.user.email %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Department</div>
+      <div class="detail-value"><span class="badge badge-teacher"><%= @teacher.department.present? ? @teacher.department : "N/A" %></span></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Hire Date</div>
+      <div class="detail-value"><%= @teacher.hire_date&.strftime("%B %d, %Y") || "N/A" %></div>
+    </div>
+  </div>
+
+  <div class="detail-card-actions pt-4 border-top border-color">
+    <% if @current_user.role.name == 'admin' || @current_user.teacher == @teacher %>
+      <%= link_to edit_teacher_path(@teacher), class: "btn btn-primary" do %>
+        <i class="bi bi-pencil-square"></i> Edit Profile
+      <% end %>
+    <% end %>
+    
+    <% if @current_user.role.name == 'admin' %>
+      <%= button_to teacher_path(@teacher), method: :delete, 
+           form: { data: { turbo_confirm: "Are you sure you want to delete this teacher?" } }, 
+           class: "btn btn-danger" do %>
+        <i class="bi bi-trash"></i> Delete Teacher
+      <% end %>
+    <% end %>
+  </div>
+</div>

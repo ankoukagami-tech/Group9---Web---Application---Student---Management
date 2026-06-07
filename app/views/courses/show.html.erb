@@ -1,2 +1,83 @@
-"<!-- app/views/courses/show.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">Course Details</h1>\n    <p class=\"text-secondary mb-0\">Detailed view of academic course curriculum and properties.</p>\n  </div>\n  <%= link_to courses_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <div class=\"d-flex align-items-center gap-4 mb-4 pb-4 border-bottom border-color\">\n    <div class=\"stat-card-icon\" style=\"width: 72px; height: 72px; font-size: 2.25rem; border-radius: 20px;\">\n      <i class=\"bi bi-book-half\"></i>\n    </div>\n    <div>\n      <h3 class=\"font-weight-bold mb-1 text-gradient-primary\"><%= @course.title %></h3>\n      <div class=\"d-flex gap-2 align-items-center\">\n        <span class=\"custom-badge custom-badge-primary\"><%= @course.code %></span>\n        <span class=\"custom-badge custom-badge-success\"><%= @course.credits %> Credits</span>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"row g-4 mb-4\">\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Instructor</span>\n      <span class=\"font-weight-semibold text-primary fs-5\">\n        <%= @course.teacher ? \"#{@course.teacher.first_name} #{@course.teacher.last_name}\" : \"Not Assigned\" %>\n      </span>\n      <% if @course.teacher %>\n        <span class=\"d-block text-muted small\"><%= @course.teacher.department %> • <%= @course.teacher.user.email %></span>\n      <% end %>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Schedule Period</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @course.semester %> <%= @course.year %></span>\n    </div>\n    <div class=\"col-md-6\">\n      <span class=\"d-block small text-secondary\">Max Capacity</span>\n      <span class=\"font-weight-semibold fs-5\"><%= @course.max_capacity %> Seats</span>
-<truncated 1086 bytes>
+<!-- app/views/courses/show.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">Course Details</h1>
+    <p class="text-secondary mb-0">Detailed view of academic course specification.</p>
+  </div>
+  <%= link_to courses_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Catalog
+  <% end %>
+</div>
+
+<div class="glass-card">
+  <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-color">
+    <div class="stat-card-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; border-color: rgba(99, 102, 241, 0.2); width: 60px; height: 60px; font-size: 1.75rem;">
+      <i class="bi bi-journal-bookmark-fill"></i>
+    </div>
+    <div>
+      <h3 class="text-white mb-1"><%= @course.title %></h3>
+      <span class="badge badge-teacher font-monospace"><%= @course.code %></span>
+    </div>
+  </div>
+
+  <div class="detail-grid mb-4">
+    <div class="detail-item">
+      <div class="detail-label">Credits</div>
+      <div class="detail-value text-gradient-primary font-weight-bold" style="font-size: 1.25rem;"><%= @course.credits %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Semester</div>
+      <div class="detail-value"><%= @course.semester.present? ? @course.semester : "N/A" %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Year</div>
+      <div class="detail-value"><%= @course.year.present? ? @course.year : "N/A" %></div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Max Capacity</div>
+      <div class="detail-value"><%= @course.max_capacity.present? ? @course.max_capacity : "N/A" %></div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="detail-label">Description</div>
+    <div class="detail-value text-secondary bg-dark p-3 rounded" style="background-color: rgba(15, 22, 38, 0.5) !important; border: 1px solid var(--border-color); line-height: 1.6;">
+      <%= @course.description.present? ? @course.description : "No description provided." %>
+    </div>
+  </div>
+
+  <div class="detail-grid mb-4">
+    <div class="detail-item">
+      <div class="detail-label">Instructor</div>
+      <div class="detail-value text-white font-weight-bold">
+        <% if @course.teacher.present? %>
+          <%= @course.teacher.first_name %> <%= @course.teacher.last_name %>
+        <% else %>
+          <span class="text-muted font-weight-normal small">Not assigned</span>
+        <% end %>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Instructor Email</div>
+      <div class="detail-value text-secondary">
+        <%= @course.teacher&.user&.email.present? ? @course.teacher.user.email : "N/A" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-card-actions pt-4 border-top border-color">
+    <% if @current_user.role.name == 'admin' || (@current_user.role.name == 'teacher' && @course.teacher == @current_user.teacher) %>
+      <%= link_to edit_course_path(@course), class: "btn btn-primary" do %>
+        <i class="bi bi-pencil-square"></i> Edit Course
+      <% end %>
+    <% end %>
+    
+    <% if @current_user.role.name == 'admin' %>
+      <%= button_to course_path(@course), method: :delete, 
+           form: { data: { turbo_confirm: "Are you sure you want to delete this course?" } }, 
+           class: "btn btn-danger" do %>
+        <i class="bi bi-trash"></i> Delete Course
+      <% end %>
+    <% end %>
+  </div>
+</div>

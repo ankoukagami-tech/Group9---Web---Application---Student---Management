@@ -1,2 +1,85 @@
-"<!-- app/views/courses/new.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">New Course</h1>\n    <p class=\"text-secondary mb-0\">Create a new academic course catalog entry.</p>\n  </div>\n  <%= link_to courses_path, class: \"btn btn-secondary\" do %>\n    <i class=\"bi bi-arrow-left\"></i> Back to List\n  <% end %>\n</div>\n\n<div class=\"glass-card p-4 max-w-800 mx-auto\">\n  <%= form_with model: @course, local: true do |form| %>\n    <% if @course.errors.any? %>\n      <div class=\"custom-alert custom-alert-danger mb-4\">\n        <div>\n          <h6 class=\"font-weight-bold mb-2 text-danger\"><i class=\"bi bi-x-circle-fill me-2\"></i>Please resolve the following errors:</h6>\n          <ul class=\"mb-0 small text-secondary\">\n            <% @course.errors.full_messages.each do |message| %>\n              <li><%= message %></li>\n            <% end %>\n          </ul>\n        </div>\n      </div>\n    <% end %>\n\n    <h5 class=\"text-gradient-primary mb-3 pb-2 border-bottom border-color\"><i class=\"bi bi-journal-bookmark-fill me-2\"></i>Course Specifications</h5>\n    <div class=\"row g-3 mb-4\">\n      <div class=\"col-md-8\">\n        <%= form.label :title, \"Course Title\", class: \"form-label\" %>\n        <%= form.text_field :title, class: \"form-control\", placeholder: \"e.g. Introduction to Computer Science\", required: true %>\n      </div>\n      <div class=\"col-md-4\">\n        <%= form.label :code, \"Course Code\", class: \"form-label\" %>\n        <%= form.text_field :code, class: \"form-control\", placeholder: \"e.g. CS101\", required: true %>\n      </div>\n      <div class=\"col-12\">\n        <%= form.label :description, \"Description\", class: \"form-label\" %>\n        <%= form.text_area :description, rows: 3, class: \"form-control\", placeholder: \"Course contents, syllabus, requirements...\" %>\n      </div>\n    </div>\n\n    <h5 class=\"text-gradient-primary mb-3 pb-2 border-bottom border-col
-<truncated 2144 bytes>
+<!-- app/views/courses/new.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">New Course</h1>
+    <p class="text-secondary mb-0">Register a new academic course in the catalog.</p>
+  </div>
+  <%= link_to courses_path, class: "btn btn-secondary" do %>
+    <i class="bi bi-arrow-left"></i> Back to Catalog
+  <% end %>
+</div>
+
+<div class="glass-card max-w-800 mx-auto">
+  <%= form_with model: @course, local: true do |form| %>
+    <% if @course.errors.any? %>
+      <div class="custom-alert custom-alert-danger mb-4">
+        <i class="bi bi-x-circle-fill" style="font-size: 1.25rem;"></i>
+        <div>
+          <div class="font-weight-bold mb-1">Please fix the following errors:</div>
+          <ul class="mb-0 small" style="padding-left: 1.25rem;">
+            <% @course.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-8">
+        <%= form.label :title, "Course Title", class: "form-label" %>
+        <%= form.text_field :title, class: "form-control", placeholder: "e.g., Introduction to Programming", required: true %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= form.label :code, "Course Code", class: "form-label" %>
+        <%= form.text_field :code, class: "form-control", placeholder: "e.g., CS101", required: true %>
+      </div>
+      
+      <div class="col-12">
+        <%= form.label :description, "Course Description", class: "form-label" %>
+        <%= form.text_area :description, rows: 4, class: "form-control", placeholder: "Enter a brief summary of the syllabus and course goals..." %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <%= form.label :credits, "Credits", class: "form-label" %>
+        <%= form.number_field :credits, class: "form-control", placeholder: "e.g., 3", required: true %>
+      </div>
+
+      <div class="col-md-6">
+        <% if @current_user.role.name == 'admin' %>
+          <%= form.label :teacher_id, "Instructor", class: "form-label" %>
+          <%= form.select :teacher_id, options_from_collection_for_select(@teachers, :id, :first_name), { prompt: "Select Instructor" }, { class: "form-select" } %>
+        <% else %>
+          <%= form.hidden_field :teacher_id, value: @current_user.teacher.id %>
+          <label class="form-label">Instructor</label>
+          <input type="text" class="form-control" value="<%= @current_user.teacher.first_name %> <%= @current_user.teacher.last_name %>" readonly disabled>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <%= form.label :semester, "Semester", class: "form-label" %>
+        <%= form.text_field :semester, class: "form-control", placeholder: "e.g., Fall" %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= form.label :year, "Academic Year", class: "form-label" %>
+        <%= form.number_field :year, class: "form-control", placeholder: "e.g., 2026" %>
+      </div>
+      
+      <div class="col-md-4">
+        <%= form.label :max_capacity, "Max capacity", class: "form-label" %>
+        <%= form.number_field :max_capacity, class: "form-control", placeholder: "e.g., 30" %>
+      </div>
+    </div>
+
+    <div class="detail-card-actions pt-4 border-top border-color">
+      <%= form.submit "Create Course", class: "btn btn-primary" %>
+      <%= link_to "Cancel", courses_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,2 +1,49 @@
-"<!-- app/views/enrollments/my_courses.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">My Courses</h1>\n    <p class=\"text-secondary mb-0\">Overview of courses you are enrolled in and your academic performance.</p>\n  </div>\n</div>\n\n<div class=\"row g-4\">\n  <% if @enrollments.any? %>\n    <% @enrollments.each do |enrollment| %>\n      <div class=\"col-md-6 col-lg-4\">\n        <div class=\"glass-card p-4 h-100 d-flex flex-column justify-content-between\">\n          <div>\n            <div class=\"d-flex justify-content-between align-items-start mb-3\">\n              <span class=\"custom-badge custom-badge-primary\"><%= enrollment.course.code %></span>\n              <span class=\"custom-badge <%= enrollment.status == 'active' ? 'custom-badge-success' : 'custom-badge-warning' %>\">\n                <%= enrollment.status.capitalize %>\n              </span>\n            </div>\n            <h5 class=\"font-weight-bold text-primary mb-2\"><%= enrollment.course.title %></h5>\n            <p class=\"text-secondary small mb-4\" style=\"display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; height: 60px;\">\n              <%= enrollment.course.description.presence || \"No description provided.\" %>\n            </p>\n          </div>\n          \n          <div class=\"pt-3 border-top border-color\">\n            <div class=\"d-flex justify-content-between align-items-center mb-3\">\n              <span class=\"small text-secondary\">Credits: <strong class=\"text-primary\"><%= enrollment.course.credits %></strong></span>\n              <span class=\"small text-secondary\">Grade: \n                <strong class=\"text-gradient-secondary fs-5 ms-1\"><%= enrollment.grade.presence || 'N/A' %></strong>\n              </span>\n            </div>\n\n            <div class=\"d-flex align-items-center gap-2 pt-2 border-top border-color border-opacity-25\">\n              <div class=\"user-avat
-<truncated 1093 bytes>
+<!-- app/views/enrollments/my_courses.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">My Courses</h1>
+    <p class="text-secondary mb-0">View all your registered courses, academic statuses, and assessments.</p>
+  </div>
+</div>
+
+<div class="row g-4">
+  <% if @enrollments && @enrollments.any? %>
+    <% @enrollments.each do |enrollment| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="glass-card h-100 mb-0 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-start justify-content-between mb-3">
+              <span class="badge badge-student font-monospace"><%= enrollment.course.code %></span>
+              <span class="text-secondary small font-weight-bold"><%= enrollment.course.credits %> Credits</span>
+            </div>
+            
+            <h5 class="card-title text-white mb-2"><%= enrollment.course.title %></h5>
+            <p class="text-secondary small line-clamp-3 mb-4"><%= enrollment.course.description %></p>
+            
+            <div class="pt-3 border-top border-color">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-secondary small font-weight-bold">Status:</span>
+                <span class="badge <%= enrollment.status == 'enrolled' ? 'badge-student' : 'badge-danger' %>"><%= enrollment.status.capitalize %></span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-secondary small font-weight-bold">Grade:</span>
+                <% if enrollment.grade.present? %>
+                  <span class="text-white font-weight-bold text-gradient-primary" style="font-size: 1.15rem;"><%= enrollment.grade %></span>
+                <% else %>
+                  <span class="text-muted small">Pending</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="col-12">
+      <div class="glass-card text-center py-5 text-secondary">
+        <i class="bi bi-journal-x d-block mb-2" style="font-size: 2.5rem;"></i>
+        You are not currently enrolled in any academic courses.
+      </div>
+    </div>
+  <% end %>
+</div>

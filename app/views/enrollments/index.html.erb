@@ -1,2 +1,81 @@
-"<!-- app/views/enrollments/index.html.erb -->\n<div class=\"d-flex justify-content-between align-items-center mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">Enrollments</h1>\n    <p class=\"text-secondary mb-0\">Manage course registrations, student statuses, and academic records.</p>\n  </div>\n  <%= link_to new_enrollment_path, class: \"btn btn-primary\" do %>\n    <i class=\"bi bi-journal-plus\"></i> New Enrollment\n  <% end %>\n</div>\n\n<div class=\"custom-table-container\">\n  <div class=\"table-responsive\">\n    <table class=\"custom-table\">\n      <thead>\n        <tr>\n          <th>ID</th>\n          <th>Student</th>\n          <th>Course</th>\n          <th>Status</th>\n          <th>Grade</th>\n          <th>Actions</th>\n        </tr>\n      </thead>\n      <tbody>\n        <% if @enrollments.any? %>\n          <% @enrollments.each do |enrollment| %>\n            <tr>\n              <td><span class=\"text-secondary small font-weight-semibold\">#<%= enrollment.id %></span></td>\n              <td class=\"font-weight-bold text-primary\">\n                <%= enrollment.student.first_name %> <%= enrollment.student.last_name %>\n                <span class=\"d-block small text-muted font-weight-normal\"><%= enrollment.student.student_number %></span>\n              </td>\n              <td>\n                <span class=\"font-weight-semibold\"><%= enrollment.course.title %></span>\n                <span class=\"d-block small text-secondary\"><%= enrollment.course.code %></span>\n              </td>\n              <td>\n                <span class=\"custom-badge <%= enrollment.status == 'active' ? 'custom-badge-success' : 'custom-badge-warning' %>\">\n                  <%= enrollment.status.capitalize %>\n                </span>\n              </td>\n              <td>\n                <span class=\"font-weight-bold text-gradient-secondary\"><%= enrollment.grade.presence || 'N/A' %></span>\n              </td>\n              <td>\n                <div class=\"action-buttons\">\n         
-<truncated 805 bytes>
+<!-- app/views/enrollments/index.html.erb -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">Enrollments</h1>
+    <p class="text-secondary mb-0">Manage course registrations, student capacity, and academic statuses.</p>
+  </div>
+  <% if @current_user.role.name == 'admin' || @current_user.role.name == 'teacher' %>
+    <%= link_to new_enrollment_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-lg"></i> New Enrollment
+    <% end %>
+  <% end %>
+</div>
+
+<div class="glass-card">
+  <% if @enrollments && @enrollments.any? %>
+    <div class="custom-table-container mb-3">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Grade</th>
+            <% if @current_user.role.name == 'admin' || @current_user.role.name == 'teacher' %>
+              <th class="text-end">Actions</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% @enrollments.each do |enrollment| %>
+            <tr>
+              <td>
+                <span class="font-weight-bold text-white"><%= enrollment.student.first_name %> <%= enrollment.student.last_name %></span>
+                <div class="font-monospace text-secondary small" style="font-size: 0.75rem;"><%= enrollment.student.student_number %></div>
+              </td>
+              <td>
+                <span class="text-white"><%= enrollment.course.title %></span>
+                <div class="badge badge-teacher font-monospace small d-block mt-1" style="width: max-content; font-size: 0.7rem;"><%= enrollment.course.code %></div>
+              </td>
+              <td>
+                <span class="badge <%= enrollment.status == 'enrolled' ? 'badge-student' : 'badge-danger' %>">
+                  <%= enrollment.status.capitalize %>
+                </span>
+              </td>
+              <td>
+                <% if enrollment.grade.present? %>
+                  <span class="font-weight-bold" style="color: #6366f1;"><%= enrollment.grade %></span>
+                <% else %>
+                  <span class="text-muted small">N/A</span>
+                <% end %>
+              </td>
+              <td class="text-end">
+                <div class="d-inline-flex gap-2">
+                  <%= link_to edit_enrollment_path(enrollment), class: "btn btn-secondary btn-sm", style: "border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;", title: "Grade" do %>
+                    <i class="bi bi-award-fill"></i> Grade
+                  <% end if @current_user.role.name == 'admin' || (@current_user.role.name == 'teacher' && enrollment.course.teacher == @current_user.teacher) %>
+                  
+                  <%= button_to enrollment_path(enrollment), method: :delete, 
+                       form: { data: { turbo_confirm: "Are you sure you want to remove this enrollment?" } }, 
+                       class: "btn btn-danger btn-sm", 
+                       title: "Delete" do %>
+                    <i class="bi bi-trash"></i> Delete
+                  <% end if @current_user.role.name == 'admin' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="d-flex justify-content-center mt-4">
+      <%= paginate @enrollments %>
+    </div>
+  <% else %>
+    <div class="text-center py-5 text-secondary">
+      <i class="bi bi-clipboard-x d-block mb-2" style="font-size: 2.5rem;"></i>
+      No student enrollments found.
+    </div>
+  <% end %>
+</div>

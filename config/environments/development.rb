@@ -61,6 +61,11 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  # Disable file-based Sprockets asset caching on Windows to prevent "Permission denied @ rb_file_s_rename" errors
+  config.assets.configure do |env|
+    env.cache = ActiveSupport::Cache.lookup_store(:null_store)
+  end
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

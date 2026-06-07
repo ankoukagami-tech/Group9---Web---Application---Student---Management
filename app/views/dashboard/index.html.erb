@@ -1,2 +1,262 @@
-"<!-- app/views/dashboard/index.html.erb -->\n<div class=\"d-flex align-items-center justify-content-between mb-4\">\n  <div>\n    <h1 class=\"mb-1 text-gradient-primary\">Dashboard</h1>\n    <p class=\"text-secondary mb-0\">Welcome back, <%= @current_user.role.name.capitalize %>!</p>\n  </div>\n</div>\n\n<% if @current_user.role.name == 'admin' %>\n  <div class=\"row g-4 mb-5\">\n    <div class=\"col-md-4\">\n      <div class=\"glass-card stat-card\">\n        <div class=\"stat-card-info\">\n          <span class=\"stat-card-val\"><%= @total_students %></span>\n          <span class=\"stat-card-lbl\">Total Students</span>\n        </div>\n        <div class=\"stat-card-icon\">\n          <i class=\"bi bi-people-fill\"></i>\n        </div>\n      </div>\n    </div>\n    \n    <div class=\"col-md-4\">\n      <div class=\"glass-card stat-card stat-card-success\">\n        <div class=\"stat-card-info\">\n          <span class=\"stat-card-val\"><%= @total_courses %></span>\n          <span class=\"stat-card-lbl\">Total Courses</span>\n        </div>\n        <div class=\"stat-card-icon\" style=\"background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);\">\n          <i class=\"bi bi-book-half\"></i>\n        </div>\n      </div>\n    </div>\n    \n    <div class=\"col-md-4\">\n      <div class=\"glass-card stat-card stat-card-warning\">\n        <div class=\"stat-card-info\">\n          <span class=\"stat-card-val\"><%= @total_teachers %></span>\n          <span class=\"stat-card-lbl\">Total Teachers</span>\n        </div>\n        <div class=\"stat-card-icon\" style=\"background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: rgba(245, 158, 11, 0.2);\">\n          <i class=\"bi bi-person-badge-fill\"></i>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"glass-card mb-4\">\n    <div class=\"card-header-gradient d-flex justify-content-between align-items-center\">\n      <h5 class=\"mb-0 font-weight-bold\"><i class=\"bi bi-clock-history me-2 text-primary\"
-<truncated 8996 bytes>
+<!-- app/views/dashboard/index.html.erb -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div>
+    <h1 class="mb-1 text-gradient-primary">Dashboard</h1>
+    <p class="text-secondary mb-0">Welcome back, <%= @current_user.email %>! Here is your portal overview.</p>
+  </div>
+</div>
+
+<% if @current_user.role.name == 'admin' %>
+  <!-- Admin Statistics Grid -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Total Students</div>
+          <div class="stat-card-value"><%= @total_students %></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; border-color: rgba(99, 102, 241, 0.2);">
+          <i class="bi bi-journal-bookmark-fill"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Total Courses</div>
+          <div class="stat-card-value"><%= @total_courses %></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7; border-color: rgba(168, 85, 247, 0.2);">
+          <i class="bi bi-person-badge-fill"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Total Teachers</div>
+          <div class="stat-card-value"><%= @total_teachers %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="glass-card">
+    <h4 class="mb-4 text-gradient-primary"><i class="bi bi-clock-history me-2"></i>Recent Enrollments</h4>
+    <% if @recent_enrollments && @recent_enrollments.any? %>
+      <div class="custom-table-container">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Student ID</th>
+              <th>Course Enrolled</th>
+              <th>Enrollment Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_enrollments.each do |enrollment| %>
+              <tr>
+                <td>
+                  <span class="font-weight-bold text-white"><%= enrollment.student.first_name %> <%= enrollment.student.last_name %></span>
+                </td>
+                <td><span class="text-secondary font-monospace"><%= enrollment.student.student_number %></span></td>
+                <td><%= enrollment.course.title %> (<%= enrollment.course.code %>)</td>
+                <td><%= enrollment.enrollment_date&.strftime("%B %d, %Y") || enrollment.created_at.strftime("%B %d, %Y") %></td>
+                <td>
+                  <span class="badge <%= enrollment.status == 'enrolled' ? 'badge-student' : 'badge-danger' %>">
+                    <%= enrollment.status.capitalize %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-4 text-secondary">
+        <i class="bi bi-clipboard-x d-block mb-2" style="font-size: 2.5rem;"></i>
+        No recent enrollments found.
+      </div>
+    <% end %>
+  </div>
+
+<% elsif @current_user.role.name == 'teacher' %>
+  <!-- Teacher Statistics Grid -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; border-color: rgba(99, 102, 241, 0.2);">
+          <i class="bi bi-journal-bookmark-fill"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Your Courses</div>
+          <div class="stat-card-value"><%= @courses&.count || 0 %></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Unique Enrolled Students</div>
+          <div class="stat-card-value"><%= @students_count %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher's Assigned Courses -->
+  <h4 class="mb-3 text-gradient-primary"><i class="bi bi-journals me-2"></i>My Teaching Courses</h4>
+  <div class="row g-4 mb-5">
+    <% if @courses && @courses.any? %>
+      <% @courses.each do |course| %>
+        <div class="col-md-6 col-lg-4">
+          <div class="glass-card h-100 mb-0 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex align-items-start justify-content-between mb-2">
+                <span class="badge badge-teacher"><%= course.code %></span>
+                <span class="text-secondary small font-weight-bold"><%= course.credits %> Credits</span>
+              </div>
+              <h5 class="card-title text-white mb-2"><%= course.title %></h5>
+              <p class="text-secondary small line-clamp-2"><%= course.description %></p>
+            </div>
+            <div class="detail-card-actions pt-3 border-top border-color">
+              <%= link_to course_path(course), class: "btn btn-secondary btn-sm" do %>
+                <i class="bi bi-eye"></i> View
+              <% end %>
+              <%= link_to edit_course_path(course), class: "btn btn-primary btn-sm" do %>
+                <i class="bi bi-pencil-square"></i> Edit
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="col-12">
+        <div class="glass-card text-center py-4 text-secondary">
+          No courses assigned to your instruction profile.
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Student Enrollments Management -->
+  <div class="glass-card">
+    <h4 class="mb-4 text-gradient-primary"><i class="bi bi-person-lines-fill me-2"></i>Manage Student Enrollments & Grades</h4>
+    <% if @enrolled_students && @enrolled_students.any? %>
+      <div class="custom-table-container">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Email</th>
+              <th>Course Title</th>
+              <th>Status</th>
+              <th>Current Grade</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @enrolled_students.each do |student| %>
+              <% student.enrollments.joins(:course).where(courses: { teacher: @current_user.teacher }).each do |enrollment| %>
+                <tr>
+                  <td class="font-monospace text-secondary small"><%= student.student_number %></td>
+                  <td><span class="font-weight-bold text-white"><%= student.first_name %> <%= student.last_name %></span></td>
+                  <td class="text-secondary"><%= student.user.email %></td>
+                  <td><%= enrollment.course.title %></td>
+                  <td>
+                    <span class="badge <%= enrollment.status == 'enrolled' ? 'badge-student' : 'badge-danger' %>">
+                      <%= enrollment.status.capitalize %>
+                    </span>
+                  </td>
+                  <td>
+                    <% if enrollment.grade.present? %>
+                      <span class="font-weight-bold text-gradient-primary"><%= enrollment.grade %></span>
+                    <% else %>
+                      <span class="text-muted small">N/A</span>
+                    <% end %>
+                  </td>
+                  <td class="text-end">
+                    <%= link_to edit_enrollment_path(enrollment), class: "btn btn-secondary btn-sm" do %>
+                      <i class="bi bi-award-fill"></i> Grade
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-4 text-secondary">
+        <i class="bi bi-person-x d-block mb-2" style="font-size: 2.5rem;"></i>
+        No students are enrolled in your classes.
+      </div>
+    <% end %>
+  </div>
+
+<% elsif @current_user.role.name == 'student' %>
+  <!-- Student Statistics Grid -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-12">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.2);">
+          <i class="bi bi-journal-check"></i>
+        </div>
+        <div class="stat-card-info">
+          <div class="stat-card-label">Your Enrolled Courses</div>
+          <div class="stat-card-value"><%= @enrolled_courses&.count || 0 %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Enrolled Courses -->
+  <h4 class="mb-3 text-gradient-primary"><i class="bi bi-mortarboard me-2"></i>My Academic Courses</h4>
+  <div class="row g-4">
+    <% if @enrolled_courses && @enrolled_courses.any? %>
+      <% @enrolled_courses.each do |course| %>
+        <div class="col-md-6">
+          <div class="glass-card h-100 mb-0 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex align-items-start justify-content-between mb-3">
+                <span class="badge badge-student"><%= course.code %></span>
+                <span class="text-secondary small font-weight-bold"><%= course.credits %> Credits</span>
+              </div>
+              <h5 class="card-title text-white mb-2"><%= course.title %></h5>
+              <p class="text-secondary small mb-4"><%= course.description %></p>
+              
+              <div class="d-flex align-items-center gap-3 pt-3 border-top border-color">
+                <div class="stat-card-icon" style="width: 40px; height: 40px; font-size: 1.1rem; border-radius: 8px;">
+                  <i class="bi bi-person-workspace"></i>
+                </div>
+                <div>
+                  <div class="text-muted small" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Instructor</div>
+                  <div class="text-white small font-weight-bold"><%= course.teacher&.first_name %> <%= course.teacher&.last_name %></div>
+                  <div class="text-secondary small"><%= course.teacher&.user&.email %></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center py-5 text-secondary">
+        <i class="bi bi-journal-x d-block mb-2" style="font-size: 2.5rem;"></i>
+        You are not currently enrolled in any courses.
+      </div>
+    <% end %>
+  </div>
+<% end %>
