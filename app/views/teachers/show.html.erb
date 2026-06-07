@@ -1,0 +1,19 @@
+<!-- app/views/teachers/show.html.erb -->
+<div class="card">
+  <div class="card-header">
+    <h3>Teacher Details</h3>
+  </div>
+  <div class="card-body">
+    <p><strong>Employee Number:</strong> <%= @teacher.employee_number %></p>
+    <p><strong>Name:</strong> <%= @teacher.first_name %> <%= @teacher.last_name %></p>
+    <p><strong>Email:</strong> <%= @teacher.user.email %></p>
+    <p><strong>Department:</strong> <%= @teacher.department %></p>
+    <p><strong>Hire Date:</strong> <%= @teacher.hire_date %></p>
+  </div>
+</div>
+
+<%= link_to "Edit", edit_teacher_path(@teacher), class: "btn btn-warning" %>
+<%= button_to "Delete", teacher_path(@teacher), method: :delete, 
+     form: { data: { turbo_confirm: "Are you sure you want to delete this teacher?" } }, 
+     class: "btn btn-danger" %>
+<%= link_to "Back", teachers_path, class: "btn btn-secondary" %>

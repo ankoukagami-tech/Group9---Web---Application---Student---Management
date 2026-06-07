@@ -1,0 +1,34 @@
+<!-- app/views/enrollments/index.html.erb -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Enrollments</h1>
+  <%= link_to "New Enrollment", new_enrollment_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Student</th>
+      <th>Course</th>
+      <th>Status</th>
+      <th>Grade</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @enrollments.each do |enrollment| %>
+      <tr>
+        <td><%= enrollment.id %></td>
+        <td><%= enrollment.student.first_name %> <%= enrollment.student.last_name %></td>
+        <td><%= enrollment.course.title %></td>
+        <td><%= enrollment.status.capitalize %></td>
+        <td><%= enrollment.grade || 'N/A' %></td>
+        <td>
+          <%= button_to "Delete", enrollment_path(enrollment), method: :delete, 
+               form: { data: { turbo_confirm: "Are you sure?" } }, 
+               class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

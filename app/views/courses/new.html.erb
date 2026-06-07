@@ -1,0 +1,68 @@
+<!-- app/views/courses/new.html.erb -->
+<h1>New Course</h1>
+
+<%= form_with model: @course, local: true do |form| %>
+  <% if @course.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @course.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :code, class: "form-label" %>
+    <%= form.text_field :code, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :credits, class: "form-label" %>
+    <%= form.number_field :credits, class: "form-control" %>
+  </div>
+
+  <% if @current_user.role.name == 'admin' %>
+    <div class="mb-3">
+      <%= form.label :teacher_id, class: "form-label" %>
+      <%= form.select :teacher_id, options_from_collection_for_select(@teachers, :id, :first_name), { prompt: "Select Teacher" }, { class: "form-control" } %>
+    </div>
+  <% else %>
+    <!-- Hidden field for teacher_id since teacher can only create courses for themselves -->
+    <%= form.hidden_field :teacher_id, value: @current_user.teacher.id %>
+    <div class="mb-3">
+      <label class="form-label">Instructor</label>
+      <input type="text" class="form-control" value="<%= @current_user.teacher.first_name %> <%= @current_user.teacher.last_name %>" readonly>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :semester, class: "form-label" %>
+    <%= form.text_field :semester, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :year, class: "form-label" %>
+    <%= form.number_field :year, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :max_capacity, class: "form-label" %>
+    <%= form.number_field :max_capacity, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", courses_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

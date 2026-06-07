@@ -1,0 +1,36 @@
+<!-- app/views/teachers/index.html.erb -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Teachers</h1>
+  <%= link_to "New Teacher", new_teacher_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Employee Number</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @teachers.each do |teacher| %>
+      <tr>
+        <td><%= teacher.id %></td>
+        <td><%= teacher.employee_number %></td>
+        <td><%= teacher.first_name %> <%= teacher.last_name %></td>
+        <td><%= teacher.user.email %></td>
+        <td><%= teacher.department %></td>
+        <td>
+          <%= link_to "Show", teacher_path(teacher), class: "btn btn-sm btn-info" %>
+          <%= link_to "Edit", edit_teacher_path(teacher), class: "btn btn-sm btn-warning" %>
+          <%= button_to "Delete", teacher_path(teacher), method: :delete, 
+               form: { data: { turbo_confirm: "Are you sure?" } }, 
+               class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
